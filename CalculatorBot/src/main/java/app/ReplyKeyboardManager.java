@@ -1,9 +1,11 @@
+package app;
+
+import handlers.CalculatorExpressionHandler;
+import handlers.*;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
-import java.util.ArrayList;
-
-public class ReplyKeyboard {
+public class ReplyKeyboardManager {
     public static ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
 
     public static StringBuilder expression = new StringBuilder();
@@ -15,7 +17,7 @@ public class ReplyKeyboard {
         return replyKeyboardMarkup;
     }
 
-    public static String getMessage(String message) {
+    public static String getMessage(String message, Update update) {
         replyKeyboardMarkup.setSelective(true);
         replyKeyboardMarkup.setResizeKeyboard(true);
         replyKeyboardMarkup.setOneTimeKeyboard(false);
@@ -24,25 +26,28 @@ public class ReplyKeyboard {
             return MenuHandler.handle();
         }
 
-        if (message.equals("Ping-pong") && !pingPongIsOn) {
-            return PingPongHandler.handle();
-        }
-
         if (message.equals("Exit") && pingPongIsOn) {
             return ExitHandler.handle();
         }
 
         if (!pingPongIsOn) {
+            if (message.equals("Ping-pong")) {
+                return PingPongHandler.handle();
+            }
+
             if (message.equals("Calculator")) {
                 return MainCalculatorHandler.handle();
             }
 
             if (calculatorIsOn) {
-                return CalculatorExpressionHandler.handle(message);
+                return CalculatorExpressionHandler.handle(message, update);
             }
-
-            return MenuHandler.handle();
         }
-        return message;
+
+        if (pingPongIsOn) {
+            return message;
+        }
+
+        return MenuHandler.handle();
     }
 }

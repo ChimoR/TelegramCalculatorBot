@@ -1,5 +1,8 @@
+package app;
+
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -22,12 +25,13 @@ public class MyBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
-        sendMessage.setReplyMarkup(ReplyKeyboard.getReplyKeyboard());
+        sendMessage.setReplyMarkup(ReplyKeyboardManager.getReplyKeyboard());
         try {
-            sendMessage.setText(ReplyKeyboard.getMessage(update.getMessage().getText()));
+            sendMessage.setText(ReplyKeyboardManager.getMessage(update.getMessage().getText(), update));
             execute(sendMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+
     }
 }

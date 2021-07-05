@@ -1,26 +1,25 @@
+package handlers;
+
+import app.ReplyKeyboardManager;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import java.util.ArrayList;
 
-public class PingPongHandler {
+public class MenuHandler {
     public static String handle() {
-        ReplyKeyboard.pingPongIsOn = true;
-
         ArrayList<KeyboardRow> keyboard = new ArrayList<>();
         KeyboardRow firstRow = new KeyboardRow();
         KeyboardRow secondRow = new KeyboardRow();
-        KeyboardRow thirdRow = new KeyboardRow();
 
+        ReplyKeyboardManager.pingPongIsOn = false;
+        ReplyKeyboardManager.calculatorIsOn = false;
         firstRow.add("Ping-pong");
         secondRow.add("Calculator");
-        thirdRow.add("Exit");
 
         keyboard.add(firstRow);
         keyboard.add(secondRow);
-        keyboard.add(thirdRow);
-
-        ReplyKeyboard.replyKeyboardMarkup.setKeyboard(keyboard);
-
-        return "Enter \"Menu\" or \"/start\" to turn off ping-pong";
+        ReplyKeyboardManager.replyKeyboardMarkup.setKeyboard(keyboard);
+        return "Welcome";
     }
+
 }

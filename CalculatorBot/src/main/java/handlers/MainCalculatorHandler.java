@@ -1,16 +1,20 @@
+package handlers;
+
+import app.ReplyKeyboardManager;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import java.util.ArrayList;
 
 public class MainCalculatorHandler {
     public static String handle() {
-        ReplyKeyboard.calculatorIsOn = true;
+        ReplyKeyboardManager.calculatorIsOn = true;
 
         ArrayList<KeyboardRow> keyboard = new ArrayList<>();
         KeyboardRow firstRow = new KeyboardRow();
         KeyboardRow secondRow = new KeyboardRow();
         KeyboardRow thirdRow = new KeyboardRow();
         KeyboardRow fourthRow = new KeyboardRow();
+        KeyboardRow fifthRow = new KeyboardRow();
 
         firstRow.add("7");
         firstRow.add("8");
@@ -27,16 +31,20 @@ public class MainCalculatorHandler {
         thirdRow.add("3");
         thirdRow.add("-");
 
-        fourthRow.add("Exit");
+        fourthRow.add(".");
         fourthRow.add("0");
-        fourthRow.add("=");
+        fourthRow.add("AC");
         fourthRow.add("+");
+
+        fifthRow.add("Exit");
+        fifthRow.add("=");
 
         keyboard.add(firstRow);
         keyboard.add(secondRow);
         keyboard.add(thirdRow);
         keyboard.add(fourthRow);
-        ReplyKeyboard.replyKeyboardMarkup.setKeyboard(keyboard);
+        keyboard.add(fifthRow);
+        ReplyKeyboardManager.replyKeyboardMarkup.setKeyboard(keyboard);
 
         return "Enter expression";
     }
