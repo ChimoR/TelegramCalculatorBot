@@ -2,8 +2,6 @@ package handlers;
 
 import app.DatabaseManager;
 import app.ReplyKeyboardManager;
-import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import service.ExpressionResolver;
 
@@ -13,16 +11,9 @@ public class CalculatorExpressionHandler {
     public static String handle(String message, Update update) {
         String literal = "";
 
-        if (message.equals("1")) literal = "1";
-        if (message.equals("2")) literal = "2";
-        if (message.equals("3")) literal = "3";
-        if (message.equals("4")) literal = "4";
-        if (message.equals("5")) literal = "5";
-        if (message.equals("6")) literal = "6";
-        if (message.equals("7")) literal = "7";
-        if (message.equals("8")) literal = "8";
-        if (message.equals("9")) literal = "9";
-        if (message.equals("0")) literal = "0";
+        if (message.matches("[0-9]")) {
+            literal = message;
+        }
         if (message.equals("-")) literal = " - ";
         if (message.equals("+")) literal = " + ";
         if (message.equals("/")) literal = " / ";
