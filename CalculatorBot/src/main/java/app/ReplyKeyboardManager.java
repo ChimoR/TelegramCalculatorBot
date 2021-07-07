@@ -27,7 +27,7 @@ public class ReplyKeyboardManager {
         }
 
         if (message.equals("Exit") && pingPongIsOn) {
-            return ExitHandler.handle();
+            return MenuHandler.handle();
         }
 
         if (!pingPongIsOn) {

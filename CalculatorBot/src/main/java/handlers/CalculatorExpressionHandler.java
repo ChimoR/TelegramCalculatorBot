@@ -1,14 +1,18 @@
 package handlers;
 
+import app.DatabaseManager;
 import app.ReplyKeyboardManager;
+import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import service.ExpressionResolver;
+
+import java.util.Date;
 
 public class CalculatorExpressionHandler {
     public static String handle(String message, Update update) {
         String literal = "";
 
-        if (message.equals("0")) literal = "0";
         if (message.equals("1")) literal = "1";
         if (message.equals("2")) literal = "2";
         if (message.equals("3")) literal = "3";
@@ -18,12 +22,12 @@ public class CalculatorExpressionHandler {
         if (message.equals("7")) literal = "7";
         if (message.equals("8")) literal = "8";
         if (message.equals("9")) literal = "9";
+        if (message.equals("0")) literal = "0";
         if (message.equals("-")) literal = " - ";
         if (message.equals("+")) literal = " + ";
         if (message.equals("/")) literal = " / ";
         if (message.equals("*")) literal = " * ";
         if (message.equals("=")) literal = " = ";
-        if (message.equals(".")) literal = ".";
 
         if (!message.equals("Exit") && message.length() >= 2) {
             StringBuilder sb = new StringBuilder(message.replaceAll(" ", ""));
@@ -41,14 +45,22 @@ public class CalculatorExpressionHandler {
             }
 
             if (sb.indexOf("=") != -1) {
-                sb.replace(sb.indexOf("="), sb.indexOf("=") + 1, "");
+                sb.replace(sb.indexOf("="), sb.length(), "");
                 ReplyKeyboardManager.expression.append(sb);
                 String exp = ReplyKeyboardManager.expression.toString();
+
                 try {
-                    ReplyKeyboardManager.expressionResult = ExpressionResolver.resolve( ReplyKeyboardManager.expression.toString());
+                    ReplyKeyboardManager.expressionResult = ExpressionResolver.resolve(ReplyKeyboardManager.expression.toString());
                     String expResult =  ReplyKeyboardManager.expressionResult;
                     ReplyKeyboardManager.expression = new StringBuilder();
                     ReplyKeyboardManager.expressionResult = "";
+
+                    DatabaseManager.insertData(
+                            new Date().toString(),
+                            update.getMessage().getFrom().getId(),
+                            update.getMessage().getFrom().getUserName(),
+                            exp, expResult);
+
                     return String.format("Result: %s = %s", exp, expResult);
                 }
                 catch (Exception e) {
@@ -61,7 +73,7 @@ public class CalculatorExpressionHandler {
         if (message.equals("Exit")) {
             ReplyKeyboardManager.expression = new StringBuilder();
             ReplyKeyboardManager.expressionResult = "";
-            return ExitHandler.handle();
+            return MenuHandler.handle();
         }
 
         if (!message.equals("=")) {
@@ -71,10 +83,17 @@ public class CalculatorExpressionHandler {
         if (literal.equals(" = ")) {
             String exp = ReplyKeyboardManager.expression.toString();
             try {
-                ReplyKeyboardManager.expressionResult = ExpressionResolver.resolve( ReplyKeyboardManager.expression.toString());
+                ReplyKeyboardManager.expressionResult = ExpressionResolver.resolve(ReplyKeyboardManager.expression.toString());
                 String expResult =  ReplyKeyboardManager.expressionResult;
                 ReplyKeyboardManager.expression = new StringBuilder();
                 ReplyKeyboardManager.expressionResult = "";
+
+                DatabaseManager.insertData(
+                        new Date().toString(),
+                        update.getMessage().getFrom().getId(),
+                        update.getMessage().getFrom().getUserName(),
+                        exp, expResult);
+
                 return String.format("Result: %s = %s", exp, expResult);
             }
             catch (Exception e) {

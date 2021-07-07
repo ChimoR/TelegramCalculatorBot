@@ -2,14 +2,12 @@ package app;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class MyBot extends TelegramLongPollingBot {
-    private static final String BOT_USERNAME = "Calculator Bot";
-    private static final String BOT_TOKEN = "1803190469:AAGEnYuL0tOPYXXhmFhynsMvDcN6DiLlvRw";
-
+    public static String BOT_USERNAME;
+    public static String BOT_TOKEN;
 
     @Override
     public String getBotUsername() {
